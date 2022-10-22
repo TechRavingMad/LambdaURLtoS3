@@ -1,0 +1,15 @@
+import boto3
+import botocore.vendored.requests.packages.urllib3 as urllib3
+import time
+
+timestr = time.strftime("%Y%m%d") #Used to generate a datestamp for file dating
+
+bucket = "<S3 Bucket>" #The destination S3 Bucket
+filename = "<uploaded filename>"+timestr+"<file extension>" #The desired filename to upload as.  You may also add a folder in front by adding <folder>/
+URL = '<URL>' #The direct file URL
+
+def lambda_handler(event, context):
+
+    s3=boto3.client('s3')
+    http=urllib3.PoolManager()
+    s3.upload_fileobj(http.request('GET', URL,preload_content=False), bucket, filename)

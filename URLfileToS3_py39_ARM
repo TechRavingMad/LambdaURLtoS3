@@ -1,0 +1,14 @@
+import boto3
+import urllib3
+import time
+
+timestr = time.strftime("%Y%m%d")#create datestamp for later use.
+bucket = "<bucket name>"#Can include a folder/ in front of file name if desired.
+filename = "<desired Output filename>"+timestr+"<file extensionn>"
+URL = "<URL To Download>"
+
+def lambda_handler(event, context):
+
+    s3=boto3.client('s3')
+    http=urllib3.PoolManager()
+    s3.upload_fileobj(http.request('GET', URL,preload_content=False), bucket, filename)
